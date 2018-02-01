@@ -156,38 +156,38 @@ public static class TerrainExtensions
                 NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                 if (UpHeights.Length > 6)
                 {
-                    NewHeights[0, z] = UpHeights[res,z]; // Good
+                    float Height1 = UpHeights[res, z];
+                    float Height2 = NewHeights[x, z];
+                    NewHeights[0, z] = Height1; // Good
+                    if (x >= 1)
+                    {
+                        float Height3 = Mathf.SmoothStep(NewHeights[x - 1, z], Height2, 0.1f);
+                        NewHeights[x, z] = Height3;
+                    }
                 }
                 if (DownHeights.Length > 6)
                 {
-                    NewHeights[res, z] = DownHeights[0,z]; // Good
+                    float Height1 = DownHeights[0, z];
+                    float Height2 = NewHeights[x, z];
+                    NewHeights[res, z] = Height1; // Good
+                    if ( x > 1 && z > 1)
+                    {
+                        // NewHeights[x - 1, z]
+                        float Height3 = Mathf.SmoothStep(NewHeights[x - 1, z - 1],Height2, 0.1f);
+                        NewHeights[res - x, z] = Height3;
+                    }
+
                 }
                 if (RightHeights.Length > 6)
                 {
-                    NewHeights[z, 0] = RightHeights[z,res]; // Good
+                    NewHeights[z, 0] = RightHeights[z, res]; // Good
                 }
                 if (LeftHeights.Length > 6)
                 {
-                    NewHeights[z, res] = LeftHeights[z,0]; // Good
+                    NewHeights[z, res] = LeftHeights[z, 0]; // Good
                 }
             }
         }
         terrainData.SetHeights(0,0,NewHeights);
     }
 }
-                    //switch (direction)
-                    //{
-                    //    case Direction.UP:
-                    //        NewHeights[0, z] = PreviousHeights[terrainData.heightmapResolution - 1, z];
-                    //        break;
-                    //    case Direction.Down:
-                    //        NewHeights[terrainData.heightmapResolution - 1, z] = PreviousHeights[0, z];
-                    //        break;
-                    //    case Direction.Left:
-                    //        NewHeights[z, terrainData.heightmapResolution - 1] = PreviousHeights[z, 0];
-                    //        break;
-                    //    case Direction.Right:
-                    //        NewHeights[z, 0] = PreviousHeights[z, terrainData.heightmapResolution - 1];
-                    //        break;
-                    //    default:
-                    //        break;
