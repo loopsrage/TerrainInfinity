@@ -254,8 +254,8 @@ MonoBehaviour:
     y: 0
     width: 1153
     height: 597
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 204, y: 221}
+  m_MaxSize: {x: 4004, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -369,9 +369,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: -3360
-    y: 1049
+    y: 1048
     width: 1529
-    height: 369
+    height: 370
   m_SearchFilter:
     m_NameFilter: 
     m_ClassNames: []
@@ -384,18 +384,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets
+    - Assets/Resources/Scripts/Terrain
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets
+  - Assets/Resources/Scripts/Terrain
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\TerrainInfinity-Master\InfiniteTerrain
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 9c270000
-    m_LastClickedID: 10140
+    m_SelectedIDs: 50290000
+    m_LastClickedID: 10576
     m_ExpandedIDs: 000000009c270000e82700004428000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -449,8 +449,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 9c270000
-    m_LastClickedInstanceID: 10140
+    m_SelectedInstanceIDs: daa9feff
+    m_LastClickedInstanceID: -87590
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000c0b8eaff00000000
     m_RenameOverlay:
@@ -592,14 +592,14 @@ MonoBehaviour:
     width: 1149
     height: 576
   m_SceneLighting: 1
-  lastFramingTime: 2580.160758348024
+  lastFramingTime: 3342.5763032800137
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 698.05457, y: -1086.1425, z: -1250.3345}
+    m_Target: {x: 271.61176, y: -282.2477, z: 202.63612}
     speed: 2
-    m_Value: {x: 698.05457, y: -1086.1425, z: -1250.3345}
+    m_Value: {x: 271.61176, y: -282.2477, z: 202.63612}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -622,13 +622,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.07254604, y: 0.92321414, z: -0.30884954, w: 0.21685158}
+    m_Target: {x: -0.28143752, y: -0.58407134, z: 0.22610739, w: -0.727}
     speed: 2
-    m_Value: {x: 0.07254605, y: 0.9232142, z: -0.30884957, w: 0.21685159}
+    m_Value: {x: -0.28143755, y: -0.5840714, z: 0.2261074, w: -0.72700006}
   m_Size:
-    m_Target: 1917.1676
+    m_Target: 491.47293
     speed: 2
-    m_Value: 1917.1676
+    m_Value: 491.47293
   m_Ortho:
     m_Target: 0
     speed: 2

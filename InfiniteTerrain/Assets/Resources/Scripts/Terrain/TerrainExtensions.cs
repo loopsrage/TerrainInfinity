@@ -108,7 +108,7 @@ public static class TerrainExtensions
     {
         Dictionary<Direction, GameObject> Neighbors = GetNeighbors(TerrainPosition);
         float[,] NewHeights = new float[terrainData.heightmapWidth, terrainData.heightmapHeight];
-        float RandomNoise = Random.Range(50f, 300f);
+        float RandomNoise = 200f;// Random.Range(50f, 300f);
 
         float[,] UpHeights;
         float[,] DownHeights;
@@ -157,6 +157,8 @@ public static class TerrainExtensions
         {
             FirstTerrain = false;
         }
+        int EithRes = res / 8;
+        int NegRes = res - EithRes;
         for (int x = 0; x <= terrainData.heightmapResolution - 1; x++)
         {
             for (int z = 0; z <= terrainData.heightmapResolution - 1; z++)
@@ -170,49 +172,78 @@ public static class TerrainExtensions
                     if (UpHeights.Length > 6)
                     {
                         NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        float Height1 = UpHeights[res, z];
-                        float Height2 = NewHeights[x, z];
-                        NewHeights[0, z] = Height1; // Good
-                        if (x >= 1)
+                        if (x <= EithRes)
                         {
-                            float Height3 = Mathf.SmoothStep(NewHeights[x - 1, z], Height2, 0.1f);
-                            NewHeights[x, z] = Height3; // Good
+                            float Height1 = UpHeights[res, z];
+                            NewHeights[0, z] = Height1; // Good
+                            float Height2 = NewHeights[x, z];
+                            if (x >= 1)
+                            {
+                                float Height3 = Mathf.SmoothStep(NewHeights[x - 1, z], Height2, 0.1f);
+                                NewHeights[x, z] = Height3; // Good
+                            }
+                        }
+                        else
+                        {
+                            //NewHeights[x, z] = 0.2f;// Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                     if (DownHeights.Length > 6)
                     {
+
                         NewHeights[res - x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        float Height1 = DownHeights[0, z];
-                        float Height2 = NewHeights[res - x, z];
-                        NewHeights[res, z] = Height1; // Good
-                        if (x >= 1)
+                        if (x <= EithRes)
                         {
-                            float Height3 = Mathf.SmoothStep(NewHeights[res - x + 1, z], Height2, 0.1f);
-                            NewHeights[res - x,z] = Height3; // Good
+                            float Height1 = DownHeights[0, z];
+                            NewHeights[res, z] = Height1; // Good
+                            float Height2 = NewHeights[res - x, z];
+                            if (x >= 1)
+                            {
+                                float Height3 = Mathf.SmoothStep(NewHeights[res - x + 1, z], Height2, 0.1f);
+                                NewHeights[res - x, z] = Height3; // Good
+                            }
+                        }
+                        else
+                        {
+                            //NewHeights[res - x, z] = 0.7f;//Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                     if (RightHeights.Length > 6)
                     {
                         NewHeights[z, x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        float Height1 = RightHeights[z, res];
-                        float Height2 = NewHeights[z, x];
-                        NewHeights[z, 0] = Height1; // Good
-                        if (x >= 1)
+                        if (x <= EithRes)
                         {
-                            float Height3 = Mathf.SmoothStep(NewHeights[z, x - 1],Height2,0.1f);
-                            NewHeights[z, x] = Height3; // Good
+                            float Height1 = RightHeights[z, res];
+                            NewHeights[z, 0] = Height1; // Good
+                            float Height2 = NewHeights[z, x];
+                            if (x >= 1)
+                            {
+                                float Height3 = Mathf.SmoothStep(NewHeights[z, x - 1], Height2, 0.1f);
+                                NewHeights[z, x] = Height3; // Good
+                            }
+                        }
+                        else
+                        {
+                            //NewHeights[z, x] = 0.5f;// Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                     if (LeftHeights.Length > 6)
                     {
                         NewHeights[z, res - x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        float Height1 = LeftHeights[z, 0];
-                        float Height2 = NewHeights[z, res - x];
-                        NewHeights[z, res] = LeftHeights[z, 0]; // Good
-                        if (x >= 1)
+                        if (x <= EithRes)
                         {
-                            float Height3 = Mathf.SmoothStep(NewHeights[z,res - x + 1],Height2,0.1f);
-                            NewHeights[z, res - x] = Height3; // Good
+                            float Height1 = LeftHeights[z, 0];
+                            NewHeights[z, res] = LeftHeights[z, 0]; // Good
+                            float Height2 = NewHeights[z, res - x];
+                            if (x >= 1)
+                            {
+                                float Height3 = Mathf.SmoothStep(NewHeights[z, res - x + 1], Height2, 0.1f);
+                                NewHeights[z, res - x] = Height3; // Good
+                            }
+                        }
+                        else
+                        {
+                            //NewHeights[z, res - x] = 0.1f;//Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                 }
