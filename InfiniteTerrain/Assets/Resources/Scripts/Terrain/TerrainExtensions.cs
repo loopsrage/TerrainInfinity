@@ -169,81 +169,69 @@ public static class TerrainExtensions
                 }
                 else
                 {
+
                     if (UpHeights.Length > 6)
                     {
-                        NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        if (x <= EithRes)
+                        float Height1 = UpHeights[res, z];
+                        NewHeights[0, z] = Height1; // Good
+                        if (x >= 1 && (z < EithRes || z > NegRes))
                         {
-                            float Height1 = UpHeights[res, z];
-                            NewHeights[0, z] = Height1; // Good
                             float Height2 = NewHeights[x, z];
-                            if (x >= 1)
-                            {
-                                float Height3 = Mathf.SmoothStep(NewHeights[x - 1, z], Height2, 0.1f);
-                                NewHeights[x, z] = Height3; // Good
-                            }
+                            NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            float Height3 = Mathf.SmoothStep(NewHeights[x - 1, z], Height2, 0.1f);
+                            NewHeights[x, z] = Height3; // Good
                         }
-                        else
+                        else if (z > EithRes || z < NegRes)
                         {
-                            //NewHeights[x, z] = 0.2f;// Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                     if (DownHeights.Length > 6)
                     {
-
-                        NewHeights[res - x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        if (x <= EithRes)
+                        float Height1 = DownHeights[0, z];
+                        NewHeights[res, z] = Height1; // Good
+                        if (x >= 1 && (z < EithRes || z > NegRes))
                         {
-                            float Height1 = DownHeights[0, z];
-                            NewHeights[res, z] = Height1; // Good
                             float Height2 = NewHeights[res - x, z];
-                            if (x >= 1)
-                            {
-                                float Height3 = Mathf.SmoothStep(NewHeights[res - x + 1, z], Height2, 0.1f);
-                                NewHeights[res - x, z] = Height3; // Good
-                            }
+                            NewHeights[res - x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            float Height3 = Mathf.SmoothStep(NewHeights[res - x + 1, z], Height2, 0.1f);
+                            NewHeights[res - x, z] = Height3; // Good
                         }
-                        else
+                        else if (z > EithRes || z < NegRes)
                         {
-                            //NewHeights[res - x, z] = 0.7f;//Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            NewHeights[res - x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                     if (RightHeights.Length > 6)
                     {
-                        NewHeights[z, x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        if (x <= EithRes)
+                        float Height1 = RightHeights[z, res];
+                        NewHeights[z, 0] = Height1; // Good
+                        if (x >= 1 && (z < EithRes || z > NegRes))
                         {
-                            float Height1 = RightHeights[z, res];
-                            NewHeights[z, 0] = Height1; // Good
                             float Height2 = NewHeights[z, x];
-                            if (x >= 1)
-                            {
-                                float Height3 = Mathf.SmoothStep(NewHeights[z, x - 1], Height2, 0.1f);
-                                NewHeights[z, x] = Height3; // Good
-                            }
+                            NewHeights[z, x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            float Height3 = Mathf.SmoothStep(NewHeights[z, x - 1], Height2, 0.1f);
+                            NewHeights[z, x] = Height3; // Good
                         }
-                        else
+                        else if (z > EithRes || z < NegRes)
                         {
-                            //NewHeights[z, x] = 0.5f;// Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            NewHeights[z, x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                     if (LeftHeights.Length > 6)
                     {
-                        NewHeights[z, res - x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        if (x <= EithRes)
+                        float Height1 = LeftHeights[z, 0];
+                        NewHeights[z, res] = LeftHeights[z, 0]; // Good
+                        if (x >= 1 && (z < EithRes || z > NegRes))
                         {
-                            float Height1 = LeftHeights[z, 0];
-                            NewHeights[z, res] = LeftHeights[z, 0]; // Good
                             float Height2 = NewHeights[z, res - x];
-                            if (x >= 1)
-                            {
-                                float Height3 = Mathf.SmoothStep(NewHeights[z, res - x + 1], Height2, 0.1f);
-                                NewHeights[z, res - x] = Height3; // Good
-                            }
+                            NewHeights[z, res - x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            float Height3 = Mathf.SmoothStep(NewHeights[z, res - x + 1], Height2, 0.1f);
+                            NewHeights[z, res - x] = Height3; // Good
                         }
-                        else
+                        else if (z > EithRes || z < NegRes)
                         {
-                            //NewHeights[z, res - x] = 0.1f;//Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            NewHeights[z, res - x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
                         }
                     }
                 }

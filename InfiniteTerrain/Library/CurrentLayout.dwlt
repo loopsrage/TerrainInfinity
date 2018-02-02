@@ -449,8 +449,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: daa9feff
-    m_LastClickedInstanceID: -87590
+    m_SelectedInstanceIDs: 8c89fbff
+    m_LastClickedInstanceID: -292468
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000c0b8eaff00000000
     m_RenameOverlay:
@@ -540,8 +540,8 @@ MonoBehaviour:
     height: 576
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
+    m_SelectedIDs: ae14fbff
+    m_LastClickedID: -322386
     m_ExpandedIDs: a6fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -592,14 +592,14 @@ MonoBehaviour:
     width: 1149
     height: 576
   m_SceneLighting: 1
-  lastFramingTime: 3342.5763032800137
+  lastFramingTime: 10565.35698744457
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 271.61176, y: -282.2477, z: 202.63612}
+    m_Target: {x: -53.40932, y: -56.879684, z: 17.480091}
     speed: 2
-    m_Value: {x: 271.61176, y: -282.2477, z: 202.63612}
+    m_Value: {x: -53.40932, y: -56.879684, z: 17.480091}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -622,19 +622,19 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.28143752, y: -0.58407134, z: 0.22610739, w: -0.727}
+    m_Target: {x: -0.14288536, y: 0.81560916, z: -0.22739263, w: -0.51250166}
     speed: 2
-    m_Value: {x: -0.28143755, y: -0.5840714, z: 0.2261074, w: -0.72700006}
+    m_Value: {x: -0.14288537, y: 0.8156093, z: -0.22739266, w: -0.5125017}
   m_Size:
-    m_Target: 491.47293
+    m_Target: 258.0731
     speed: 2
-    m_Value: 491.47293
+    m_Value: 258.0731
   m_Ortho:
     m_Target: 0
     speed: 2
     m_Value: 0
   m_ShowGlobalGrid: 1
-  m_LastSceneViewRotation: {x: -0.14141566, y: -0.3251442, z: 0.049243737, w: -0.93373334}
+  m_LastSceneViewRotation: {x: 0.14882039, y: -0.8462599, z: 0.30878407, w: 0.40785903}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
