@@ -10,10 +10,12 @@ public class GameMaster : MonoBehaviour {
     public TerrainSettings terrainSettings;
     public Vector3 PlayerPosition;
     public GameObject TrackerObject;
+    public TerrainBiome terrainBiome;
     // Use this for initialization
     void Awake () {
         terrainManager = ScriptableObject.CreateInstance<TerrainManager>();
         terrainSettings = ScriptableObject.CreateInstance<TerrainSettings>();
+        terrainBiome = ScriptableObject.CreateInstance<TerrainBiome>();
         if (gameMaster != this)
         {
             gameMaster = this;
