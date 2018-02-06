@@ -14,6 +14,7 @@ public class TerrainSettings : ScriptableObject
     public int HeightMapResolution = 1024;
     public Vector3 MapSize = new Vector3(512f,20f, 512f);
     public float EdgeDistance = 512;
+    public float AlphaMapResolution = 512f;
 }
 public class TerrainBiome : ScriptableObject
 {
@@ -46,7 +47,7 @@ public class TerrainBiome : ScriptableObject
         {
             case Biomes.Planes:
                 terrainSettingContainer.NoiseMin = 50f;
-                terrainSettingContainer.NoiseMax = 200f;
+                terrainSettingContainer.NoiseMax = 50f;
                 terrainSettingContainer.MaxHeight = 20f;
                 terrainSettingContainer.MaxAngle = 1f;
                 terrainSettingContainer.Textures = GetTextures(Biomes.Planes);
@@ -66,6 +67,8 @@ public class TerrainSettingContainer
     public float NoiseMin { get; set; }
     public float NoiseMax { get; set; }
     public float MaxAngle { get; set; }
-    public SplatPrototype[] Textures { get; set; }
     public float MaxHeight { get; set; }
+
+    public float HeightMapResolution { get; set; }
+    public SplatPrototype[] Textures { get; set; }
 }

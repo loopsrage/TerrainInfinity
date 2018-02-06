@@ -24,10 +24,10 @@ public static class TerrainExtensions
         // TerrainData settings
         NewTerrainData.heightmapResolution = GameMaster.gameMaster.terrainSettings.HeightMapResolution;
         NewTerrainData.size = GameMaster.gameMaster.terrainSettings.MapSize;
-        NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
-
-        // Texture Settings
         NewTerrainData.TerrainTextures(BiomeSettings.Textures);
+        NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
+        NewTerrainData.GenerateAlphaMap();
+        // Texture Settings
         GameObject NewTerrain = Terrain.CreateTerrainGameObject(NewTerrainData);
         // GameObject Settings
         NewTerrain.transform.position = Position;
@@ -280,5 +280,28 @@ public static class TerrainExtensions
             }
         }
         terrainData.SetHeights(0,0,NewHeights);
+    }
+    public static void GenerateAlphaMap(this TerrainData terrainData)
+    {
+        int Res = (int)GameMaster.gameMaster.terrainSettings.AlphaMapResolution;
+        float[,,] AlphaMap = new float[Res, Res, 3];
+
+        for (int x = 0; x < GameMaster.gameMaster.terrainSettings.AlphaMapResolution - 1; x++)
+        {
+            for (int y = 0; y < GameMaster.gameMaster.terrainSettings.AlphaMapResolution - 1; y++)
+            {
+                float NormX = x * 1.0f / (Res - 1);
+                float NormY = y * 1.0f / (Res - 1);
+
+                float Angle = terrainData.GetSteepness(NormX,NormY);
+
+                float Frac = Angle / 90f;
+
+                AlphaMap[x, y, 0] = 0.2f - Frac;
+                AlphaMap[x, y, 1] = Frac;
+                AlphaMap[x, y, 2] = 0.1f - Frac;
+            }
+        }
+        terrainData.SetAlphamaps(0,0,AlphaMap);
     }
 }
