@@ -27,10 +27,13 @@ public static class TerrainExtensions
         NewTerrainData.TerrainTextures(BiomeSettings.Textures);
         NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
         NewTerrainData.GenerateAlphaMap();
+        NewTerrainData.GenerateFoliage();
+
         // Texture Settings
         GameObject NewTerrain = Terrain.CreateTerrainGameObject(NewTerrainData);
         // GameObject Settings
-        NewTerrain.transform.position = Position;
+        Vector3 NewTerrainPosition = new Vector3(Position.x,Position.y,Position.z);
+        NewTerrain.transform.position = NewTerrainPosition;
         NewTerrain.AddComponent<TerrainScript>();
         // Terrain Settings
         Terrain ThisTerrain = NewTerrain.GetComponent<Terrain>();
@@ -286,22 +289,59 @@ public static class TerrainExtensions
         int Res = (int)GameMaster.gameMaster.terrainSettings.AlphaMapResolution;
         float[,,] AlphaMap = new float[Res, Res, 3];
 
-        for (int x = 0; x < GameMaster.gameMaster.terrainSettings.AlphaMapResolution - 1; x++)
+        for (int x = 0; x < GameMaster.gameMaster.terrainSettings.AlphaMapResolution ; x++)
         {
-            for (int y = 0; y < GameMaster.gameMaster.terrainSettings.AlphaMapResolution - 1; y++)
+            for (int y = 0; y < GameMaster.gameMaster.terrainSettings.AlphaMapResolution ; y++)
             {
-                float NormX = x * 1.0f / (Res - 1);
-                float NormY = y * 1.0f / (Res - 1);
+                SplatPrototype[] Textures = terrainData.splatPrototypes;
+                float[] splatWeights = new float[terrainData.alphamapLayers];
+                float x_01 = (float)x / (float)Res;
+                float y_01 = (float)y / (float)Res;
+                float Height = terrainData.GetHeight(Mathf.RoundToInt(y_01 * terrainData.heightmapHeight), Mathf.RoundToInt(x_01 * terrainData.heightmapWidth));
+                Vector3 Normal = terrainData.GetInterpolatedNormal(y_01, x_01);
+                float steepness = terrainData.GetSteepness(y_01, x_01);
 
-                float Angle = terrainData.GetSteepness(NormX,NormY);
+                splatWeights[2] = 0.1f;
+                splatWeights[1] = Mathf.Clamp01(terrainData.heightmapHeight - Height);
+                splatWeights[0] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
 
-                float Frac = Angle / 90f;
+                float z = splatWeights.Sum();
 
-                AlphaMap[x, y, 0] = 0.2f - Frac;
-                AlphaMap[x, y, 1] = Frac;
-                AlphaMap[x, y, 2] = 0.1f - Frac;
+                for (int i = 0; i < terrainData.alphamapLayers; i++)
+                {
+                    splatWeights[i] /= z;
+                    AlphaMap[x, y, i] = splatWeights[i];
+                }
             }
         }
         terrainData.SetAlphamaps(0,0,AlphaMap);
+    }
+    public static void GenerateFoliage(this TerrainData terrainData)
+    {
+        int TreeCount = Random.Range(10,20);
+        int ScaleRand = Random.Range(5,15);
+        GameObject[] Trees = Resources.LoadAll<GameObject>("Scripts/Terrain/Trees");
+        TreeInstance[] treeInstance = new TreeInstance[TreeCount];
+        TreePrototype[] treePrototype = new TreePrototype[Trees.Length];
+        for (int p = 0; p < treePrototype.Length; p++)
+        {
+            treePrototype[p] = new TreePrototype();
+            treePrototype[p].prefab = Trees[p];
+
+        }
+        terrainData.treePrototypes = treePrototype;
+        for (int t = 0; t < treeInstance.Length; t++)
+        {
+            int RandomIndex = Random.Range(0, treePrototype.Length);
+            Vector3 RandPosition = new Vector3(Random.Range(0,100) / 100f, 0f, Random.Range(0, 100) / 100f);
+            float RandRot = Random.Range(0, 360);
+            treeInstance[t] = new TreeInstance();
+            treeInstance[t].prototypeIndex = RandomIndex;
+            treeInstance[t].heightScale = ScaleRand;
+            treeInstance[t].widthScale = ScaleRand;
+            treeInstance[t].position = RandPosition;
+            treeInstance[t].rotation = RandRot;
+        }
+        terrainData.treeInstances = treeInstance;
     }
 }

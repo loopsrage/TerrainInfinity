@@ -46,15 +46,25 @@ public class TerrainBiome : ScriptableObject
         switch (biomes)
         {
             case Biomes.Planes:
-                terrainSettingContainer.NoiseMin = 50f;
-                terrainSettingContainer.NoiseMax = 50f;
+                terrainSettingContainer.NoiseMin = 150f;
+                terrainSettingContainer.NoiseMax = 150f;
                 terrainSettingContainer.MaxHeight = 20f;
                 terrainSettingContainer.MaxAngle = 1f;
                 terrainSettingContainer.Textures = GetTextures(Biomes.Planes);
                 break;
             case Biomes.Hills:
+                terrainSettingContainer.NoiseMin = 90f;
+                terrainSettingContainer.NoiseMax = 90f;
+                terrainSettingContainer.MaxHeight = 20f;
+                terrainSettingContainer.MaxAngle = 1f;
+                terrainSettingContainer.Textures = GetTextures(Biomes.Hills);
                 break;
             case Biomes.Mountain:
+                terrainSettingContainer.NoiseMin = 50f;
+                terrainSettingContainer.NoiseMax = 50f;
+                terrainSettingContainer.MaxHeight = 20f;
+                terrainSettingContainer.MaxAngle = 1f;
+                terrainSettingContainer.Textures = GetTextures(Biomes.Mountain);
                 break;
             default:
                 break;
@@ -68,7 +78,6 @@ public class TerrainSettingContainer
     public float NoiseMax { get; set; }
     public float MaxAngle { get; set; }
     public float MaxHeight { get; set; }
-
     public float HeightMapResolution { get; set; }
     public SplatPrototype[] Textures { get; set; }
 }
