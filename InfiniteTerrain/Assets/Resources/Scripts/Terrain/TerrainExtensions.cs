@@ -28,6 +28,7 @@ public static class TerrainExtensions
         NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
         NewTerrainData.GenerateAlphaMap();
         NewTerrainData.GenerateFoliage();
+        NewTerrainData.GenerateGrass();
 
         // Texture Settings
         GameObject NewTerrain = Terrain.CreateTerrainGameObject(NewTerrainData);
@@ -37,6 +38,7 @@ public static class TerrainExtensions
         NewTerrain.AddComponent<TerrainScript>();
         // Terrain Settings
         Terrain ThisTerrain = NewTerrain.GetComponent<Terrain>();
+        ThisTerrain.detailObjectDistance = 250;
 
         GameMaster.gameMaster.terrainManager.TerrainPositions.Add(Position,NewTerrain);
         return NewTerrain;
@@ -343,5 +345,48 @@ public static class TerrainExtensions
             treeInstance[t].rotation = RandRot;
         }
         terrainData.treeInstances = treeInstance;
+    }
+    public static void GenerateGrass(this TerrainData terrainData)
+    {
+        int DetailResolution = 512;
+        int DetailPerPatch = 8;
+        Texture2D[] GrassTextures = Resources.LoadAll<Texture2D>("Scripts/Terrain/Grass");
+        DetailPrototype[] detailPrototype = new DetailPrototype[GrassTextures.Length];
+        int[,] DetailMap = new int[DetailResolution, DetailResolution];
+        terrainData.SetDetailResolution(DetailResolution,DetailPerPatch);
+        for (int g = 0; g < detailPrototype.Length; g++)
+        {
+            detailPrototype[g] = new DetailPrototype();
+            detailPrototype[g].prototypeTexture = GrassTextures[g];
+            detailPrototype[g].renderMode = DetailRenderMode.Grass;
+            detailPrototype[g].minHeight = 1f;
+            detailPrototype[g].minWidth= 1f;
+            detailPrototype[g].maxHeight = 5f;
+            detailPrototype[g].maxWidth = 2f;
+            detailPrototype[g].noiseSpread = 0.1f;
+        }
+        for (int x = 0; x < DetailResolution; x++)
+        {
+            for (int z = 0; z < DetailResolution; z++)
+            {
+                if (terrainData.GetHeight(x, z) < 9.0f)
+                {
+                    DetailMap[x, z] = 1;
+                }
+                else
+                {
+                    if (Random.Range(0,20) < 2)
+                    {
+                        DetailMap[x, z] = 1;
+                    }
+                    else
+                    {
+                        DetailMap[x, z] = 0;
+                    }
+                }
+            }
+        }
+        terrainData.detailPrototypes = detailPrototype;
+        terrainData.SetDetailLayer(0, 0, 0, DetailMap);
     }
 }
