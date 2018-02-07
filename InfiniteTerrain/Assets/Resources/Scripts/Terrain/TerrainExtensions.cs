@@ -401,14 +401,22 @@ public static class TerrainExtensions
         switch (biome)
         {
             case TerrainBiome.Biomes.Planes:
-                for (int x = 20; x < Res - 20; x++)
+                for (int x = 0; x < Res; x++)
                 {
-                    for (int z = 20; z < Res - 20; z++)
+                    for (int z = 0; z < Res; z++)
                     {
                         float CurrentHeight = Heights[x, z];
                         if (CurrentHeight < 0.3f)
                         {
                             Heights[x, z] = CurrentHeight - Mathf.PerlinNoise(x / 200f, z / 200f);
+                        }
+                        if (CurrentHeight > 0.5)
+                        {
+                            Heights[x, z] += Mathf.PerlinNoise(x / 200f, z / 200f) / 100f;
+                        }
+                        else
+                        {
+                            Heights[x, z] /= Mathf.SmoothStep(Heights[x,z],1f,1f);
                         }
                     }
                 }
