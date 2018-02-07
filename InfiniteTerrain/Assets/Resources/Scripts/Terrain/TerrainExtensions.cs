@@ -16,10 +16,11 @@ public static class TerrainExtensions
     public static GameObject CreateTerrain(Vector3 Position,
         Terrain PreviousTerrain = null,
         Direction direction = Direction.UP,
-        Dictionary<Direction,GameObject> Neighbors = null
+        Dictionary<Direction, GameObject> Neighbors = null,
+        TerrainBiome.Biomes Biome = TerrainBiome.Biomes.Planes
         )
     {
-        TerrainSettingContainer BiomeSettings = GameMaster.gameMaster.terrainBiome.ReturnTerrainSettings(TerrainBiome.Biomes.Planes);
+        TerrainSettingContainer BiomeSettings = GameMaster.gameMaster.terrainBiome.ReturnTerrainSettings(Biome);
         TerrainData NewTerrainData = new TerrainData();
         // TerrainData settings
         NewTerrainData.heightmapResolution = GameMaster.gameMaster.terrainSettings.HeightMapResolution;
@@ -27,8 +28,12 @@ public static class TerrainExtensions
         NewTerrainData.TerrainTextures(BiomeSettings.Textures);
         NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
         NewTerrainData.GenerateAlphaMap();
-        NewTerrainData.GenerateFoliage();
-        NewTerrainData.GenerateGrass();
+        NewTerrainData.ModifyHeightsForBiome(Biome);
+        if (Biome != TerrainBiome.Biomes.Mountain)
+        {
+            NewTerrainData.GenerateFoliage();
+            NewTerrainData.GenerateGrass();
+        }
 
         // Texture Settings
         GameObject NewTerrain = Terrain.CreateTerrainGameObject(NewTerrainData);
@@ -303,9 +308,9 @@ public static class TerrainExtensions
                 Vector3 Normal = terrainData.GetInterpolatedNormal(y_01, x_01);
                 float steepness = terrainData.GetSteepness(y_01, x_01);
 
-                splatWeights[2] = 0.1f;
-                splatWeights[1] = Mathf.Clamp01(terrainData.heightmapHeight - Height);
-                splatWeights[0] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
+                splatWeights[0] = 0.5f;
+                splatWeights[2] = Mathf.Clamp01(terrainData.heightmapHeight - Height);
+                splatWeights[1] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
 
                 float z = splatWeights.Sum();
 
@@ -361,9 +366,9 @@ public static class TerrainExtensions
             detailPrototype[g].renderMode = DetailRenderMode.Grass;
             detailPrototype[g].minHeight = 1f;
             detailPrototype[g].minWidth= 1f;
-            detailPrototype[g].maxHeight = 5f;
+            detailPrototype[g].maxHeight = 3f;
             detailPrototype[g].maxWidth = 2f;
-            detailPrototype[g].noiseSpread = 0.1f;
+            detailPrototype[g].noiseSpread = 0.5f;
         }
         for (int x = 0; x < DetailResolution; x++)
         {
@@ -388,5 +393,33 @@ public static class TerrainExtensions
         }
         terrainData.detailPrototypes = detailPrototype;
         terrainData.SetDetailLayer(0, 0, 0, DetailMap);
+    }
+    public static void ModifyHeightsForBiome(this TerrainData terrainData,TerrainBiome.Biomes biome)
+    {
+        int Res = terrainData.heightmapResolution;
+        float[,] Heights = terrainData.GetHeights(0,0,Res,Res);
+        switch (biome)
+        {
+            case TerrainBiome.Biomes.Planes:
+                for (int x = 20; x < Res - 20; x++)
+                {
+                    for (int z = 20; z < Res - 20; z++)
+                    {
+                        float CurrentHeight = Heights[x, z];
+                        if (CurrentHeight < 0.3f)
+                        {
+                            Heights[x, z] = CurrentHeight - Mathf.PerlinNoise(x / 200f, z / 200f);
+                        }
+                    }
+                }
+                break;
+            case TerrainBiome.Biomes.Hills:
+                break;
+            case TerrainBiome.Biomes.Mountain:
+                break;
+            default:
+                break;
+        }
+        terrainData.SetHeights(0,0,Heights);
     }
 }
