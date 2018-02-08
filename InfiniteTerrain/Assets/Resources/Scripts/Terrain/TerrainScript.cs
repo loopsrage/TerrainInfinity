@@ -98,18 +98,21 @@ public class TerrainScript : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        tracker.transform.SetParent(transform);
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        if (transform.childCount <= 0)
+        if (other.gameObject.tag == "Player")
         {
             tracker.transform.SetParent(transform);
         }
     }
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (transform.childCount >= 1)
+        if (transform.childCount <= 0 && other.gameObject.tag == "Player")
+        {
+            tracker.transform.SetParent(transform);
+        }
+    }
+    private void OnTriggerExit(Collider other )
+    {
+        if (transform.childCount >= 1 && other.gameObject.tag == "Player")
         {
             transform.DetachChildren();
         }

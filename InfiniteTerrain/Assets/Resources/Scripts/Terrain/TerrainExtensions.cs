@@ -27,8 +27,8 @@ public static class TerrainExtensions
         NewTerrainData.size = GameMaster.gameMaster.terrainSettings.MapSize;
         NewTerrainData.TerrainTextures(BiomeSettings.Textures);
         NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
-        NewTerrainData.GenerateAlphaMap();
         NewTerrainData.ModifyHeightsForBiome(Biome);
+        NewTerrainData.GenerateAlphaMap();
         if (Biome != TerrainBiome.Biomes.Mountain)
         {
             NewTerrainData.GenerateFoliage();
@@ -308,9 +308,9 @@ public static class TerrainExtensions
                 Vector3 Normal = terrainData.GetInterpolatedNormal(y_01, x_01);
                 float steepness = terrainData.GetSteepness(y_01, x_01);
 
-                splatWeights[0] = 0.5f;
-                splatWeights[2] = Mathf.Clamp01(terrainData.heightmapHeight - Height);
-                splatWeights[1] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
+                splatWeights[2] = 0.5f;
+                splatWeights[1] = Mathf.Clamp01(terrainData.heightmapHeight - Height);
+                splatWeights[0] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
 
                 float z = splatWeights.Sum();
 
@@ -374,7 +374,7 @@ public static class TerrainExtensions
         {
             for (int z = 0; z < DetailResolution; z++)
             {
-                if (terrainData.GetHeight(x, z) < 9.0f)
+                if (terrainData.GetHeight(x, z) > 10.0f)
                 {
                     DetailMap[x, z] = 1;
                 }
@@ -398,25 +398,22 @@ public static class TerrainExtensions
     {
         int Res = terrainData.heightmapResolution;
         float[,] Heights = terrainData.GetHeights(0,0,Res,Res);
+        float RandomNoise = Random.Range(10, 200);
         switch (biome)
         {
             case TerrainBiome.Biomes.Planes:
-                for (int x = 0; x < Res; x++)
+                for (int x = 1; x < Res - 1; x++)
                 {
-                    for (int z = 0; z < Res; z++)
+                    for (int z = 1; z < Res - 1; z++)
                     {
                         float CurrentHeight = Heights[x, z];
                         if (CurrentHeight < 0.3f)
                         {
-                            Heights[x, z] = CurrentHeight - Mathf.PerlinNoise(x / 200f, z / 200f);
+                            Heights[x, z] -= Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 4;
                         }
-                        if (CurrentHeight > 0.5)
+                        else if (CurrentHeight > 0.4)
                         {
-                            Heights[x, z] += Mathf.PerlinNoise(x / 200f, z / 200f) / 100f;
-                        }
-                        else
-                        {
-                            Heights[x, z] /= Mathf.SmoothStep(Heights[x,z],1f,1f);
+                            Heights[x, z] += Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 100;
                         }
                     }
                 }
