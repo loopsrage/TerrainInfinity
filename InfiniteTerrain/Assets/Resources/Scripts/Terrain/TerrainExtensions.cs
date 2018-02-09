@@ -17,14 +17,16 @@ public static class TerrainExtensions
         Terrain PreviousTerrain = null,
         Direction direction = Direction.UP,
         Dictionary<Direction, GameObject> Neighbors = null,
-        TerrainBiome.Biomes Biome = TerrainBiome.Biomes.Planes
+        TerrainBiome.Biomes Biome = TerrainBiome.Biomes.Mountain
         )
     {
         TerrainSettingContainer BiomeSettings = GameMaster.gameMaster.terrainBiome.ReturnTerrainSettings(Biome);
         TerrainData NewTerrainData = new TerrainData();
         // TerrainData settings
         NewTerrainData.heightmapResolution = GameMaster.gameMaster.terrainSettings.HeightMapResolution;
-        NewTerrainData.size = GameMaster.gameMaster.terrainSettings.MapSize;
+        NewTerrainData.size = new Vector3(GameMaster.gameMaster.terrainSettings.MapSize.x,
+            BiomeSettings.MaxHeight,
+            GameMaster.gameMaster.terrainSettings.MapSize.z);
         NewTerrainData.TerrainTextures(BiomeSettings.Textures);
         NewTerrainData.GenerateHeights(Position,direction,BiomeSettings.NoiseMin,BiomeSettings.NoiseMax);
         NewTerrainData.ModifyHeightsForBiome(Biome);
@@ -34,7 +36,6 @@ public static class TerrainExtensions
             NewTerrainData.GenerateFoliage();
             NewTerrainData.GenerateGrass();
         }
-
         // Texture Settings
         GameObject NewTerrain = Terrain.CreateTerrainGameObject(NewTerrainData);
         // GameObject Settings
@@ -184,7 +185,7 @@ public static class TerrainExtensions
             {
                 if (FirstTerrain)
                 {
-                    NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise , z / RandomNoise );
+                    NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise , z / RandomNoise) / 4;
                 }
                 else
                 {
@@ -196,7 +197,7 @@ public static class TerrainExtensions
                         if (x >= 1)
                         {
 
-                            NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                            NewHeights[x, z] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 2;
                             float Height2 = NewHeights[x, z];
                             float Height3 = 0f;
                             if (x < EithRes || z > NegRes)
@@ -220,7 +221,7 @@ public static class TerrainExtensions
                         NewHeights[res, z] = Height1; // Good
                         if (x >= 1)
                         {
-                            NewHeights[res - x, z] = Mathf.PerlinNoise(x / RandomNoise , z / RandomNoise );
+                            NewHeights[res - x, z] = Mathf.PerlinNoise(x / RandomNoise , z / RandomNoise ) / 2;
                             float Height2 = NewHeights[res - x, z];
                             float Height3 = 0f;
                             if (x < EithRes || z > NegRes)
@@ -231,11 +232,11 @@ public static class TerrainExtensions
                             {
                                 Height3 = Mathf.SmoothStep(DownHeights[x,z], Height2, 0.00001f);
                             }
-                            else
+                            else 
                             {
                                 Height3 = Mathf.MoveTowards(DownHeights[x - 1, z], Height2, 0.00001f);
                             }
-                            NewHeights[res - x, z] = Height3; // Good
+                            NewHeights[res - x, z] = Height3 ; // Good
                         }
                     }
                     if (RightHeights.Length > 6)
@@ -244,7 +245,7 @@ public static class TerrainExtensions
                         NewHeights[z, 0] = Height1; // Good
                         if (x >= 1)
                         {
-                            NewHeights[z, x] = Mathf.PerlinNoise(x / RandomNoise , z / RandomNoise );
+                            NewHeights[z, x] = Mathf.PerlinNoise(x / RandomNoise , z / RandomNoise ) / 2;
                             float Height2 = NewHeights[z, x];
                             float Height3 = 0f;
                             if (x < EithRes || z > NegRes)
@@ -268,7 +269,7 @@ public static class TerrainExtensions
                         NewHeights[z, res] = LeftHeights[z, 0]; // Good
                         if (x >= 1)
                         {
-                            NewHeights[z, res - x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise );
+                            NewHeights[z, res - x] = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise ) / 2;
                             float Height2 = NewHeights[z, res - x];
                             float Height3 = 0f;
                             if (z > NegRes || z < EithRes)
@@ -337,10 +338,13 @@ public static class TerrainExtensions
 
         }
         terrainData.treePrototypes = treePrototype;
+        float[,] TerrainHeights = terrainData.GetHeights(0,0,terrainData.heightmapResolution,terrainData.heightmapResolution);
         for (int t = 0; t < treeInstance.Length; t++)
         {
             int RandomIndex = Random.Range(0, treePrototype.Length);
-            Vector3 RandPosition = new Vector3(Random.Range(0,100) / 100f, 0f, Random.Range(0, 100) / 100f);
+            float x = Random.Range(0, 100);
+            float z = Random.Range(0, 100);
+            Vector3 RandPosition = new Vector3(x / 100f, TerrainHeights[(int)x,(int)z], z / 100f);
             float RandRot = Random.Range(0, 360);
             treeInstance[t] = new TreeInstance();
             treeInstance[t].prototypeIndex = RandomIndex;
@@ -374,7 +378,7 @@ public static class TerrainExtensions
         {
             for (int z = 0; z < DetailResolution; z++)
             {
-                if (terrainData.GetHeight(x, z) > 10.0f)
+                if (terrainData.GetHeight(x, z) > 20.0f)
                 {
                     DetailMap[x, z] = 1;
                 }
@@ -398,7 +402,7 @@ public static class TerrainExtensions
     {
         int Res = terrainData.heightmapResolution;
         float[,] Heights = terrainData.GetHeights(0,0,Res,Res);
-        float RandomNoise = Random.Range(10, 200);
+        float RandomNoise = Random.Range(200, 500);
         switch (biome)
         {
             case TerrainBiome.Biomes.Planes:
@@ -407,13 +411,13 @@ public static class TerrainExtensions
                     for (int z = 1; z < Res - 1; z++)
                     {
                         float CurrentHeight = Heights[x, z];
-                        if (CurrentHeight < 0.3f)
+                        if (CurrentHeight <= 0.1f)
                         {
-                            Heights[x, z] -= Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 4;
+                            Heights[x, z] -= Mathf.PerlinNoise(Heights[x, z] + x / RandomNoise, Heights[x, z] + z / RandomNoise) / 40;
                         }
-                        else if (CurrentHeight > 0.4)
+                        else if (CurrentHeight >= 0.2f && CurrentHeight <= 0.4f)
                         {
-                            Heights[x, z] += Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 100;
+                            Heights[x, z] += Mathf.PerlinNoise(Heights[x,z] + x / RandomNoise, Heights[x,z] + z / RandomNoise) / 100;
                         }
                     }
                 }
@@ -421,6 +425,15 @@ public static class TerrainExtensions
             case TerrainBiome.Biomes.Hills:
                 break;
             case TerrainBiome.Biomes.Mountain:
+                for (int x = 1; x < Res - 1; x++)
+                {
+                    for (int z = 1; z < Res - 1; z++)
+                    {
+                        float PreviousHeights = Heights[x - 1, z - 1];
+                        float Slope = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
+                        Heights[x, z] += Mathf.SmoothStep(PreviousHeights, Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise), 0.1f) / 4f;
+                    }
+                }
                 break;
             default:
                 break;

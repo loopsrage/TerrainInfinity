@@ -11,7 +11,7 @@ public class TerrainManager : ScriptableObject
 }
 public class TerrainSettings : ScriptableObject
 {
-    public int HeightMapResolution = 1024;
+    public int HeightMapResolution = 512;
     public Vector3 MapSize = new Vector3(512f,20f, 512f);
     public float EdgeDistance = 512;
     public float AlphaMapResolution = 512f;
@@ -48,21 +48,21 @@ public class TerrainBiome : ScriptableObject
             case Biomes.Planes:
                 terrainSettingContainer.NoiseMin = 150f;
                 terrainSettingContainer.NoiseMax = 150f;
-                terrainSettingContainer.MaxHeight = 20f;
+                terrainSettingContainer.MaxHeight = 200f;
                 terrainSettingContainer.MaxAngle = 1f;
                 terrainSettingContainer.Textures = GetTextures(Biomes.Planes);
                 break;
             case Biomes.Hills:
                 terrainSettingContainer.NoiseMin = 90f;
                 terrainSettingContainer.NoiseMax = 90f;
-                terrainSettingContainer.MaxHeight = 20f;
+                terrainSettingContainer.MaxHeight = 200f;
                 terrainSettingContainer.MaxAngle = 1f;
                 terrainSettingContainer.Textures = GetTextures(Biomes.Hills);
                 break;
             case Biomes.Mountain:
-                terrainSettingContainer.NoiseMin = 50f;
-                terrainSettingContainer.NoiseMax = 50f;
-                terrainSettingContainer.MaxHeight = 20f;
+                terrainSettingContainer.NoiseMin = 200f;
+                terrainSettingContainer.NoiseMax = 200f;
+                terrainSettingContainer.MaxHeight = 600f;
                 terrainSettingContainer.MaxAngle = 1f;
                 terrainSettingContainer.Textures = GetTextures(Biomes.Mountain);
                 break;
