@@ -430,8 +430,22 @@ public static class TerrainExtensions
                     for (int z = 1; z < Res - 1; z++)
                     {
                         float PreviousHeights = Heights[x - 1, z - 1];
-                        float Slope = Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise);
-                        Heights[x, z] += Mathf.SmoothStep(PreviousHeights, Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise), 0.1f) / 4f;
+                        if ((x > Res / 8 && x < Res - (Res / 8)) && (z > Res / 8 && z < Res - (Res / 8)))
+                        {
+                            Heights[x, z] = Mathf.Lerp(Heights[x, z],PreviousHeights + Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 40f, PreviousHeights);
+                            if (Heights[x, z] <= 0.2f)
+                            {
+                                Heights[x, z] += Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 30;
+                            }
+                            else if (Heights[x, z] >= 0.4f && Heights[x, z] <= 0.6f)
+                            {
+                                Heights[x, z] += Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 20;
+                            }
+                            else
+                            {
+                                Heights[x, z] += Mathf.PerlinNoise(x / RandomNoise, z / RandomNoise) / 10;
+                            }
+                        }
                     }
                 }
                 break;

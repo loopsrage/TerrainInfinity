@@ -40,7 +40,7 @@ public class TerrainScript : MonoBehaviour
                         transform.position.z);
                     if (!GameMaster.gameMaster.terrainManager.TerrainPositions.ContainsKey(Pos))
                     {
-                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.Right);
+                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.Right,null,TerrainBiome.Biomes.Mountain);
                         Neighbors.Add(TerrainExtensions.Direction.Right, NewTerrain);
                         NewTerrain.GetComponent<TerrainScript>().Neighbors.Add(TerrainExtensions.Direction.Left, gameObject);
                     }
@@ -56,7 +56,7 @@ public class TerrainScript : MonoBehaviour
                         transform.position.z + terrainSettings.MapSize.z);
                     if (!GameMaster.gameMaster.terrainManager.TerrainPositions.ContainsKey(Pos))
                     {
-                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.UP);
+                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.UP,null,TerrainBiome.Biomes.Planes);
                         Neighbors.Add(TerrainExtensions.Direction.UP, NewTerrain);
                         NewTerrain.GetComponent<TerrainScript>().Neighbors.Add(TerrainExtensions.Direction.Down, gameObject);
                     }
@@ -72,7 +72,7 @@ public class TerrainScript : MonoBehaviour
                         transform.position.z);
                     if (!GameMaster.gameMaster.terrainManager.TerrainPositions.ContainsKey(Pos))
                     {
-                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.Left);
+                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.Left,null,TerrainBiome.Biomes.Hills);
                         Neighbors.Add(TerrainExtensions.Direction.Left, NewTerrain);
                         NewTerrain.GetComponent<TerrainScript>().Neighbors.Add(TerrainExtensions.Direction.Right, gameObject);
                     }
@@ -88,7 +88,7 @@ public class TerrainScript : MonoBehaviour
                         transform.position.z - terrainSettings.MapSize.z);
                     if (!GameMaster.gameMaster.terrainManager.TerrainPositions.ContainsKey(Pos))
                     {
-                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.Down);
+                        GameObject NewTerrain = TerrainExtensions.CreateTerrain(Pos, terrain, TerrainExtensions.Direction.Down, null, TerrainBiome.Biomes.Hills);
                         Neighbors.Add(TerrainExtensions.Direction.Down, NewTerrain);
                         NewTerrain.GetComponent<TerrainScript>().Neighbors.Add(TerrainExtensions.Direction.UP, gameObject);
                     }

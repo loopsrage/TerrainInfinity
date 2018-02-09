@@ -10,7 +10,7 @@ public class PlayerTracker : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(GameMaster.gameMaster.terrainSettings.MapSize.x / 2,
-            20f,
+            100f,
             GameMaster.gameMaster.terrainSettings.MapSize.z / 2);
     }
 

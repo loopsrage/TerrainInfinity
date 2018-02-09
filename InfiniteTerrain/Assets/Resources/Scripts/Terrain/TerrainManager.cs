@@ -46,7 +46,7 @@ public class TerrainBiome : ScriptableObject
         switch (biomes)
         {
             case Biomes.Planes:
-                terrainSettingContainer.NoiseMin = 150f;
+                terrainSettingContainer.NoiseMin = 100f;
                 terrainSettingContainer.NoiseMax = 150f;
                 terrainSettingContainer.MaxHeight = 200f;
                 terrainSettingContainer.MaxAngle = 1f;
@@ -60,9 +60,9 @@ public class TerrainBiome : ScriptableObject
                 terrainSettingContainer.Textures = GetTextures(Biomes.Hills);
                 break;
             case Biomes.Mountain:
-                terrainSettingContainer.NoiseMin = 200f;
+                terrainSettingContainer.NoiseMin = 100f;
                 terrainSettingContainer.NoiseMax = 200f;
-                terrainSettingContainer.MaxHeight = 600f;
+                terrainSettingContainer.MaxHeight = 200f;
                 terrainSettingContainer.MaxAngle = 1f;
                 terrainSettingContainer.Textures = GetTextures(Biomes.Mountain);
                 break;
